@@ -12,7 +12,7 @@ var svg = d3.select("#decentraland-map").append("svg")
 
 var zoomLayer = svg.append("g");
 var zoomed = function() {
-  zoomLayer.attr("transform", d3.event.transform);
+	zoomLayer.attr("transform", d3.event.transform);
 };
 svg.call(d3.zoom()
 	.scaleExtent([0.1, 12])
@@ -41,8 +41,8 @@ function calculateTotalsForAddress(address) {
 	return totals['true'];
 }
 
-// axios.get('/static/dcl_fullmap.json')
-axios.get('https://decentraland.fyi/static/dcl_fullmap.json')
+// axios.get('https://decentraland.fyi/static/dcl_fullmap.json')
+axios.get('/static/dcl_fullmap.json')
 	.then((res) => {
 		landdata = res.data.data;
 

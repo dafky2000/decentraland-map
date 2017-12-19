@@ -1,27 +1,5 @@
-var size = 50;
-var blocksize = 5;
-var mapoffset = 150;
-var width = (mapoffset*blocksize) * 2 + blocksize;
-var height = (mapoffset*blocksize) * 2 + blocksize;
-var color = d3.scaleOrdinal(d3.schemeCategory10);
-
-var svg = d3.select("#decentraland-map").append("svg")
-	.attr('width', '100%')
-	.attr('height', '90%')
-	.attr('viewBox', '0 0 ' + width + ' ' + height);
-
-var zoomLayer = svg.append("g");
-var zoomed = function() {
-	zoomLayer.attr("transform", d3.event.transform);
-};
-svg.call(d3.zoom()
-	.scaleExtent([0.1, 12])
-	.on("zoom", zoomed)
-);
-
-var div = d3.select("body").append("div")
-	.attr("class", "tooltip")
-	.style("opacity", 0);
+var svg = d3.select("#decentraland-map").append('svg');
+document.querySelector('#decentraland-map svg').style.display = 'none';
 
 function highlightAddress (id, highlightclass) {
 	let addresses = svg.selectAll('#id-'+id);
@@ -42,6 +20,33 @@ function calculateTotalsForAddress(address) {
 }
 
 function request_dcl_map() {
+	document.querySelector('#svg_loader').style.display = 'block';
+
+	var blocksize = 5;
+	var mapoffset = 150;
+	var width = (mapoffset*blocksize) * 2 + blocksize;
+	var height = (mapoffset*blocksize) * 2 + blocksize;
+	var color = d3.scaleOrdinal(d3.schemeCategory10);
+
+	document.querySelector('#decentraland-map svg').style.display = 'block';
+	svg.attr('width', '100%')
+		.attr('height', '90%')
+		.attr('viewBox', '0 0 ' + width + ' ' + height);
+
+	var zoomLayer = svg.append("g");
+	var zoomed = function() {
+		zoomLayer.attr("transform", d3.event.transform);
+	};
+
+	svg.call(d3.zoom()
+		.scaleExtent([0.1, 12])
+		.on("zoom", zoomed)
+	);
+
+	var div = d3.select("body").append("div")
+		.attr("class", "tooltip")
+		.style("opacity", 0);
+
 	// axios.get('https://decentraland.fyi/static/dcl_fullmap.json')
 	axios.get('/static/dcl_fullmap.json')
 		.then((res) => {
@@ -83,6 +88,8 @@ function request_dcl_map() {
 					highlightAddress(d.address,'');
 				})
 				;
+
+			document.querySelector('#svg_loader').style.display = 'none';
 		}
 	);
 }

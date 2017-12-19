@@ -1,5 +1,5 @@
 var size = 50;
-var blocksize = 15;
+var blocksize = 5;
 var mapoffset = 150;
 // var mapoffsetrequest = '-'+mapoffset+',-'+mapoffset+'/'+mapoffset+','+mapoffset;
 var width = (mapoffset*blocksize) * 2 + blocksize;
@@ -27,7 +27,6 @@ var div = d3.select("body").append("div")
 axios.get('/static/dcl_fullmap.json')
 	.then((res) => {
 		landdata = res.data.data;
-		console.log(landdata);
 		zoomLayer.selectAll("rect")
 		.data(landdata)
 		.enter()

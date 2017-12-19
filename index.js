@@ -1,19 +1,19 @@
 var size = 50;
 var blocksize = 15;
 var mapoffset = 150;
-var mapoffsetrequest = '-'+mapoffset+',-'+mapoffset+'/'+mapoffset+','+mapoffset;
+// var mapoffsetrequest = '-'+mapoffset+',-'+mapoffset+'/'+mapoffset+','+mapoffset;
 var width = (mapoffset*blocksize) * 2 + blocksize;
 var height = (mapoffset*blocksize) * 2 + blocksize;
 var landdata;
 var color = d3.scaleOrdinal(d3.schemeCategory10);
 
-var svg = d3.select("#divbody").append("svg")
+var svg = d3.select("#decentraland-map").append("svg")
 	.attr("width", width)
-   .attr("height", height);
+	.attr("height", height);
 
 var zoomLayer = svg.append("g");
 var zoomed = function() {
-  zoomLayer.attr("transform", d3.event.transform);
+	zoomLayer.attr("transform", d3.event.transform);
 };
 svg.call(d3.zoom()
 	.scaleExtent([0.1, 12])
@@ -24,7 +24,7 @@ var div = d3.select("body").append("div")
 	.attr("class", "tooltip")
 	.style("opacity", 0);
 
-axios.get('https://api.auction.decentraland.org/api/parcelState/range/'+mapoffsetrequest)
+axios.get('/static/dcl_fullmap.json')
 	.then((res) => {
 		landdata = res.data.data;
 		console.log(landdata);
@@ -56,7 +56,7 @@ axios.get('https://api.auction.decentraland.org/api/parcelState/range/'+mapoffse
 );
 
 d3.select("#generate")
-   .on("click", writeDownloadLink);
+	.on("click", writeDownloadLink);
 
 function writeDownloadLink(){
 	var html = d3.select("svg")
@@ -66,7 +66,7 @@ function writeDownloadLink(){
 		.node().parentNode.innerHTML;
 
 	var blob = new Blob([html], {type: "image/svg+xml"});
-   var url = window.URL.createObjectURL(blob);
+	var url = window.URL.createObjectURL(blob);
 
 	var a = document.createElement("a");
 	document.body.appendChild(a);

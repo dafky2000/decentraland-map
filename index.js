@@ -41,46 +41,48 @@ function calculateTotalsForAddress(address) {
 	return totals['true'];
 }
 
-// axios.get('https://decentraland.fyi/static/dcl_fullmap.json')
-axios.get('/static/dcl_fullmap.json')
-	.then((res) => {
-		landdata = res.data.data;
+function request_dcl_map() {
+	// axios.get('https://decentraland.fyi/static/dcl_fullmap.json')
+	axios.get('/static/dcl_fullmap.json')
+		.then((res) => {
+			landdata = res.data.data;
 
-		zoomLayer.selectAll("rect")
-			.data(landdata)
-			.enter()
-			.append("rect")
-			.attr("id", function (d) { return 'id-'+(d.address === null ? d.id : d.address);})
-			.attr("x", function(d){
-				return (d.x*blocksize)+(width/2)+1;
-			})
-			.attr("y", function(d){
-				return ((d.y*-1)*blocksize)+(height/2)+1;
-			})
-			.attr("height", blocksize)
-			.attr("width", blocksize)
-			.attr("fill", function(d) {return d.projectId !== null ? '#BFBFBF' : color(d.amount/100) ;})
-			.on("click", function(d) { window.open('https://etherscan.io/address/'+d.address);console.log(d);})
-			.on("mouseover", function(d) {
-				highlightAddress(d.address,'highlightAddress');
-				let totals = calculateTotalsForAddress(d.address);
+			zoomLayer.selectAll("rect")
+				.data(landdata)
+				.enter()
+				.append("rect")
+				.attr("id", function (d) { return 'id-'+(d.address === null ? d.id : d.address);})
+				.attr("x", function(d){
+					return (d.x*blocksize)+(width/2)+1;
+				})
+				.attr("y", function(d){
+					return ((d.y*-1)*blocksize)+(height/2)+1;
+				})
+				.attr("height", blocksize)
+				.attr("width", blocksize)
+				.attr("fill", function(d) {return d.projectId !== null ? '#BFBFBF' : color(d.amount/100) ;})
+				.on("click", function(d) { window.open('https://etherscan.io/address/'+d.address);console.log(d);})
+				.on("mouseover", function(d) {
+					highlightAddress(d.address,'highlightAddress');
+					let totals = calculateTotalsForAddress(d.address);
 
-				div.transition().duration(100).style("opacity", 0.8);
-				div.html("Id:"+ d.id
-					+ "<br/>" + (d.projectId !== null ? 'Non biddable' : 'Bid:'+d.amount)
-					+ "<br/>Total Land:"+ totals.numland
-					+ "<br/>Total m&#xb2;:"+ totals.numland*100
-					+ "<br/>Total Bid:"+ totals.totalbids
-					+ "<br/>Max Bid:"+ totals.maxbid
-				).style("left", (d3.event.pageX + 10) + "px").style("top", (d3.event.pageY ) + "px");
+					div.transition().duration(100).style("opacity", 0.8);
+					div.html("Id:"+ d.id
+						+ "<br/>" + (d.projectId !== null ? 'Non biddable' : 'Bid:'+d.amount)
+						+ "<br/>Total Land:"+ totals.numland
+						+ "<br/>Total m&#xb2;:"+ totals.numland*100
+						+ "<br/>Total Bid:"+ totals.totalbids
+						+ "<br/>Max Bid:"+ totals.maxbid
+					).style("left", (d3.event.pageX + 10) + "px").style("top", (d3.event.pageY ) + "px");
 
-			})
-			.on("mouseout", function(d) {
-				div.transition()
-				.duration(400)
-				.style("opacity", 0);
-				highlightAddress(d.address,'');
-			})
-			;
-	}
-);
+				})
+				.on("mouseout", function(d) {
+					div.transition()
+					.duration(400)
+					.style("opacity", 0);
+					highlightAddress(d.address,'');
+				})
+				;
+		}
+	);
+}
